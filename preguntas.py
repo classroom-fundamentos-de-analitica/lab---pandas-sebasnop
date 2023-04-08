@@ -14,7 +14,7 @@ REL_PATH = r"da\lab---pandas-sebasnop\\"
 CLOUD_PATH = ""
 
 # Va a cambiar según donde se esté trabajando
-WORKING_ON_PC = True
+WORKING_ON_PC = False
 
 if WORKING_ON_PC:
     DATA_PATH = REL_PATH
