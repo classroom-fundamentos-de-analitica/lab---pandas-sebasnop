@@ -127,7 +127,13 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    return 0
+
+    # Se obtiene una lista con los valores únicos de esta columna
+    valores = tbl1['_c4'].unique()
+    mayusculas = [letra.upper() for letra in valores]
+    resultado = sorted(mayusculas)
+
+    return resultado
 
 
 def pregunta_07():
@@ -143,7 +149,10 @@ def pregunta_07():
     E    67
     Name: _c2, dtype: int64
     """
-    return 0
+
+    resultado = tbl0.groupby("_c1")["_c2"].sum()
+
+    return resultado
 
 
 def pregunta_08():
