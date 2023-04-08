@@ -9,9 +9,20 @@ Utilice los archivos `tbl0.tsv`, `tbl1.tsv` y `tbl2.tsv`, para resolver las preg
 """
 import pandas as pd
 
-tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
-tbl1 = pd.read_csv("tbl1.tsv", sep="\t")
-tbl2 = pd.read_csv("tbl2.tsv", sep="\t")
+REL_PATH = r"da\lab---pandas-sebasnop\\"
+CLOUD_PATH = "/home/runner/work/lab---pandas-sebasnop/lab---pandas-sebasnop/"
+
+# Va a cambiar según donde se esté trabajando
+WORKING_ON_PC = False
+
+if WORKING_ON_PC:
+    DATA_PATH = REL_PATH
+else:
+    DATA_PATH = CLOUD_PATH
+
+tbl0 = pd.read_csv(DATA_PATH + "tbl0.tsv", sep="\t")
+tbl1 = pd.read_csv(DATA_PATH + "tbl1.tsv", sep="\t")
+tbl2 = pd.read_csv(DATA_PATH + "tbl2.tsv", sep="\t")
 
 
 def pregunta_01():
@@ -22,7 +33,10 @@ def pregunta_01():
     40
 
     """
-    return
+
+    cantidad_filas_tbl0 = tbl0.shape[0]
+
+    return cantidad_filas_tbl0
 
 
 def pregunta_02():
@@ -33,7 +47,10 @@ def pregunta_02():
     4
 
     """
-    return
+    
+    cantidad_columnas_tbl0 = tbl0.shape[1]
+
+    return cantidad_columnas_tbl0
 
 
 def pregunta_03():
