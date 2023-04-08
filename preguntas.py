@@ -9,21 +9,28 @@ Utilice los archivos `tbl0.tsv`, `tbl1.tsv` y `tbl2.tsv`, para resolver las preg
 """
 import pandas as pd
 
+"""
 REL_PATH = r"da\lab---pandas-sebasnop\\"
 CLOUD_PATH = ""
 
 # Va a cambiar según donde se esté trabajando
-WORKING_ON_PC = False
+WORKING_ON_PC = True
 
 if WORKING_ON_PC:
     DATA_PATH = REL_PATH
 else:
     DATA_PATH = CLOUD_PATH
+"""
 
+"""
 tbl0 = pd.read_csv(DATA_PATH + "tbl0.tsv", sep="\t")
 tbl1 = pd.read_csv(DATA_PATH + "tbl1.tsv", sep="\t")
 tbl2 = pd.read_csv(DATA_PATH + "tbl2.tsv", sep="\t")
+"""
 
+tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+tbl1 = pd.read_csv("tbl1.tsv", sep="\t")
+tbl2 = pd.read_csv("tbl2.tsv", sep="\t")
 
 def pregunta_01():
     """
@@ -67,8 +74,12 @@ def pregunta_03():
     Name: _c1, dtype: int64
 
     """
+
+    print(tbl0.groupby("_c1").size())
+
     return 0
 
+pregunta_03()
 
 def pregunta_04():
     """
