@@ -14,7 +14,7 @@ REL_PATH = r"da\lab---pandas-sebasnop\\"
 CLOUD_PATH = ""
 
 # Va a cambiar según donde se esté trabajando
-WORKING_ON_PC = False
+WORKING_ON_PC = 0
 
 if WORKING_ON_PC:
     DATA_PATH = REL_PATH
@@ -86,9 +86,10 @@ def pregunta_04():
     Name: _c2, dtype: float64
     """
 
-    tbl0_p4 = tbl0[['_c1', '_c2']]
+    # tbl0_p4 = tbl0[['_c1', '_c2']]
+    # resultado = tbl0_p4.groupby("_c1").mean()
 
-    resultado = tbl0_p4.groupby("_c1").mean()
+    resultado = tbl0.groupby("_c1")["_c2"].mean()
 
     return resultado
 
@@ -108,15 +109,14 @@ def pregunta_05():
     Name: _c2, dtype: int64
     """
     
-    tbl0_p5 = tbl0[['_c1', '_c2']]
-
-    resultado = tbl0_p5.groupby('_c1').max('_c2')
-
+    # tbl0_p5 = tbl0[['_c1', '_c2']]
+    # resultado = tbl0_p5.groupby('_c1').max('_c2')
     # print(resultado)
+
+    resultado = tbl0.groupby("_c1")["_c2"].max()
 
     return resultado
 
-# pregunta_05()
 
 def pregunta_06():
     """
