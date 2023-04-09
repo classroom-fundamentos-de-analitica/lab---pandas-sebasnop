@@ -216,23 +216,15 @@ def pregunta_10():
     2   C                    0:5:6:7:9
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
-    
-
-    agrupado = tbl0.groupby('_c1')
-    elementos = agrupado.apply(
-        lambda x:
-        (":").join(
-            str(numero) for numero in
-                sorted(x['_c2'].tolist())
-            )
-    )
     """
 
     # Agrupar los valores de _c2 por cada letra en _c1
     agrupacion = tbl0.groupby('_c1')['_c2']
 
     # Convertir los valores agrupados en una lista separada por ":" y resetear el indice
-    resultado = agrupacion.apply(lambda lista: ':'.join(str(num) for num in sorted(lista))).reset_index()
+    resultado = agrupacion.apply(
+        lambda lista: ':'.join(str(num) for num in sorted(lista))
+    ).reset_index()
 
     resultado.set_index('_c1', inplace=True)
 
@@ -255,7 +247,16 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return 0
+
+    # Agrupar los valores de _c4 por cada número en _c0
+    agrupacion = tbl1.groupby('_c0')['_c4']
+
+    # Convertir los valores agrupados en una lista separada por ":" y resetear el indice
+    resultado = agrupacion.apply(
+        lambda lista: ','.join(letra for letra in sorted(lista))
+    ).reset_index()
+
+    return resultado
 
 
 def pregunta_12():
@@ -273,7 +274,28 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return 0
+
+    tabla_12 = tbl2.copy()
+
+    tabla_12["_c5a:"] =  tabla_12["_c5a"] + ":"
+
+    # Los números se están formateando como un objeto de cadena multilínea,
+    # se agrega un carácter de nueva línea (\n) después de cada línea.
+    tabla_12["numerostr"] = tabla_12['_c5b'].apply(lambda x: '{:.0f}'.format(x)) #pylint: disable=consider-using-f-string, unnecessary-lambda
+
+    tabla_12["_c5"] = tabla_12["_c5a:"] + tabla_12["numerostr"]
+
+    definitiva = tabla_12[["_c0", "_c5"]]
+
+    # Agrupar los valores de _c5 por cada número en _c0
+    agrupacion = definitiva.groupby('_c0')['_c5']
+
+    # Convertir los valores agrupados en una lista separada por ":" y resetear el indice
+    resultado = agrupacion.apply(
+        lambda lista: ','.join(par for par in sorted(lista))
+    ).reset_index()
+
+    return resultado
 
 
 def pregunta_13():
@@ -290,4 +312,16 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    return 0
+
+    tabla0_13 = tbl0[["_c0", "_c1"]]
+    tabla2_13 = tbl2[["_c0", "_c5b"]]
+
+    fusion = pd.merge(
+        tabla0_13,
+        tabla2_13,
+        on="_c0"
+    )
+
+    resultado =  fusion.groupby("_c1")["_c5b"].sum()
+
+    return resultado
