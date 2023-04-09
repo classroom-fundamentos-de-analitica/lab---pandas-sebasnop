@@ -170,7 +170,12 @@ def pregunta_08():
     39   39   E    5  1998-01-26    44
 
     """
-    return 0
+
+    tabla_p8 = tbl0.copy()
+
+    tabla_p8["suma"] = tabla_p8["_c0"] + tabla_p8["_c2"]
+
+    return tabla_p8
 
 
 def pregunta_09():
@@ -188,7 +193,14 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    return 0
+
+    tabla_p9 = tbl0.copy()
+
+    tabla_p9["year"] = tabla_p9["_c3"].map(
+        lambda x: x.split("-")[0]
+    )
+
+    return tabla_p9
 
 
 def pregunta_10():
