@@ -216,7 +216,7 @@ def pregunta_10():
     2   C                    0:5:6:7:9
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
-    """
+    
 
     agrupado = tbl0.groupby('_c1')
     elementos = agrupado.apply(
@@ -226,12 +226,18 @@ def pregunta_10():
                 sorted(x['_c2'].tolist())
             )
     )
+    """
 
-    resultado = elementos.copy()
+    # Agrupar los valores de _c2 por cada letra en _c1
+    agrupacion = tbl0.groupby('_c1')['_c2']
 
-    return elementos
+    # Convertir los valores agrupados en una lista separada por ":" y resetear el indice
+    resultado = agrupacion.apply(lambda lista: ':'.join(str(num) for num in sorted(lista))).reset_index()
 
-print(pregunta_10())
+    resultado.set_index('_c1', inplace=True)
+
+    return resultado
+
 
 def pregunta_11():
     """
