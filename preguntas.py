@@ -217,8 +217,21 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    return 0
 
+    agrupado = tbl0.groupby('_c1')
+    elementos = agrupado.apply(
+        lambda x:
+        (":").join(
+            str(numero) for numero in
+                sorted(x['_c2'].tolist())
+            )
+    )
+
+    resultado = elementos.copy()
+
+    return elementos
+
+print(pregunta_10())
 
 def pregunta_11():
     """
