@@ -9,9 +9,22 @@ Utilice los archivos `tbl0.tsv`, `tbl1.tsv` y `tbl2.tsv`, para resolver las preg
 """
 import pandas as pd
 
-tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
-tbl1 = pd.read_csv("tbl1.tsv", sep="\t")
-tbl2 = pd.read_csv("tbl2.tsv", sep="\t")
+
+REL_PATH = r"da\lab---pandas-sebasnop\\"
+CLOUD_PATH = ""
+
+# Va a cambiar según donde se esté trabajando
+WORKING_ON_PC = 0
+
+if WORKING_ON_PC:
+    DATA_PATH = REL_PATH
+else:
+    DATA_PATH = CLOUD_PATH
+
+
+tbl0 = pd.read_csv(DATA_PATH + "tbl0.tsv", sep="\t")
+tbl1 = pd.read_csv(DATA_PATH + "tbl1.tsv", sep="\t")
+tbl2 = pd.read_csv(DATA_PATH + "tbl2.tsv", sep="\t")
 
 
 def pregunta_01():
@@ -22,7 +35,10 @@ def pregunta_01():
     40
 
     """
-    return
+
+    cantidad_filas_tbl0 = tbl0.shape[0]
+
+    return cantidad_filas_tbl0
 
 
 def pregunta_02():
@@ -33,7 +49,10 @@ def pregunta_02():
     4
 
     """
-    return
+
+    cantidad_columnas_tbl0 = tbl0.shape[1]
+
+    return cantidad_columnas_tbl0
 
 
 def pregunta_03():
@@ -50,7 +69,8 @@ def pregunta_03():
     Name: _c1, dtype: int64
 
     """
-    return
+
+    return tbl0.groupby("_c1").size()
 
 
 def pregunta_04():
@@ -65,7 +85,13 @@ def pregunta_04():
     E    4.785714
     Name: _c2, dtype: float64
     """
-    return
+
+    # tbl0_p4 = tbl0[['_c1', '_c2']]
+    # resultado = tbl0_p4.groupby("_c1").mean()
+
+    resultado = tbl0.groupby("_c1")["_c2"].mean()
+
+    return resultado
 
 
 def pregunta_05():
@@ -82,7 +108,14 @@ def pregunta_05():
     E    9
     Name: _c2, dtype: int64
     """
-    return
+    
+    # tbl0_p5 = tbl0[['_c1', '_c2']]
+    # resultado = tbl0_p5.groupby('_c1').max('_c2')
+    # print(resultado)
+
+    resultado = tbl0.groupby("_c1")["_c2"].max()
+
+    return resultado
 
 
 def pregunta_06():
@@ -94,7 +127,13 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    return
+
+    # Se obtiene una lista con los valores únicos de esta columna
+    valores = tbl1['_c4'].unique()
+    mayusculas = [letra.upper() for letra in valores]
+    resultado = sorted(mayusculas)
+
+    return resultado
 
 
 def pregunta_07():
@@ -110,7 +149,10 @@ def pregunta_07():
     E    67
     Name: _c2, dtype: int64
     """
-    return
+
+    resultado = tbl0.groupby("_c1")["_c2"].sum()
+
+    return resultado
 
 
 def pregunta_08():
@@ -128,7 +170,12 @@ def pregunta_08():
     39   39   E    5  1998-01-26    44
 
     """
-    return
+
+    tabla_p8 = tbl0.copy()
+
+    tabla_p8["suma"] = tabla_p8["_c0"] + tabla_p8["_c2"]
+
+    return tabla_p8
 
 
 def pregunta_09():
@@ -146,7 +193,14 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    return
+
+    tabla_p9 = tbl0.copy()
+
+    tabla_p9["year"] = tabla_p9["_c3"].map(
+        lambda x: x.split("-")[0]
+    )
+
+    return tabla_p9
 
 
 def pregunta_10():
@@ -163,7 +217,18 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    return
+
+    # Agrupar los valores de _c2 por cada letra en _c1
+    agrupacion = tbl0.groupby('_c1')['_c2']
+
+    # Convertir los valores agrupados en una lista separada por ":" y resetear el indice
+    resultado = agrupacion.apply(
+        lambda lista: ':'.join(str(num) for num in sorted(lista))
+    ).reset_index()
+
+    resultado.set_index('_c1', inplace=True)
+
+    return resultado
 
 
 def pregunta_11():
@@ -182,7 +247,16 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return
+
+    # Agrupar los valores de _c4 por cada número en _c0
+    agrupacion = tbl1.groupby('_c0')['_c4']
+
+    # Convertir los valores agrupados en una lista separada por ":" y resetear el indice
+    resultado = agrupacion.apply(
+        lambda lista: ','.join(letra for letra in sorted(lista))
+    ).reset_index()
+
+    return resultado
 
 
 def pregunta_12():
@@ -200,7 +274,28 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return
+
+    tabla_12 = tbl2.copy()
+
+    tabla_12["_c5a:"] =  tabla_12["_c5a"] + ":"
+
+    # Los números se están formateando como un objeto de cadena multilínea,
+    # se agrega un carácter de nueva línea (\n) después de cada línea.
+    tabla_12["numerostr"] = tabla_12['_c5b'].apply(lambda x: '{:.0f}'.format(x)) #pylint: disable=consider-using-f-string, unnecessary-lambda
+
+    tabla_12["_c5"] = tabla_12["_c5a:"] + tabla_12["numerostr"]
+
+    definitiva = tabla_12[["_c0", "_c5"]]
+
+    # Agrupar los valores de _c5 por cada número en _c0
+    agrupacion = definitiva.groupby('_c0')['_c5']
+
+    # Convertir los valores agrupados en una lista separada por ":" y resetear el indice
+    resultado = agrupacion.apply(
+        lambda lista: ','.join(par for par in sorted(lista))
+    ).reset_index()
+
+    return resultado
 
 
 def pregunta_13():
@@ -217,4 +312,16 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    return
+
+    tabla0_13 = tbl0[["_c0", "_c1"]]
+    tabla2_13 = tbl2[["_c0", "_c5b"]]
+
+    fusion = pd.merge(
+        tabla0_13,
+        tabla2_13,
+        on="_c0"
+    )
+
+    resultado =  fusion.groupby("_c1")["_c5b"].sum()
+
+    return resultado
